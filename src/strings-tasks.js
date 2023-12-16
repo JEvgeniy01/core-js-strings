@@ -508,7 +508,9 @@ function unbracketTag(str) {
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(/* str */) {}
+function extractEmails(str) {
+  return str.split(',').join(',');
+}
 
 /**
  * Encode specified string with ROT13 cipher
