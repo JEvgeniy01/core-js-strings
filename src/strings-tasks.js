@@ -528,42 +528,83 @@ function extractEmails(str) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  // const obj = {
-  //   a: 'n',
-  //   b: 'o',
-  //   c: 'p',
-  //   d: 'q',
-  //   e: 'r',
-  //   f: 's',
-  //   g: 't',
-  //   h: 'u',
-  //   i: 'v',
-  //   j: 'w',
-  //   k: 'x',
-  //   l: 'y',
-  //   m: 'z',
-  // };
-  // let array = [];
-  // for (const i of str) {
-  //   for (const [key, value] of Object.entries(obj)) {
-  //     if (i.toLowerCase() === i) {
-  //       if (i === key) {
-  //         array.push(value);
-  //       } else if (i === value) {
-  //         array.push(key);
-  //       }
-  //     }
-  //     if (i.toLowerCase() !== i) {
-  //       if (i === key.toUpperCase()) {
-  //         array.push(value.toUpperCase());
-  //       } else if (i === value.toUpperCase()) {
-  //         array.push(key.toUpperCase());
-  //       }
-  //     }
-  //   }
-  // }
-  // return array.join('');
+function encodeToRot13(str) {
+  const arr1 = [
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+  ];
+  const arr2 = [
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+  ];
+  function rot13ForSingleWord(word) {
+    const resultWord = [];
+    word.forEach((letter) => {
+      if (letter.toLowerCase() === letter) {
+        if (arr1.find((itemArr1) => itemArr1 === letter)) {
+          const index = arr1.findIndex((itemArr1) => itemArr1 === letter);
+          resultWord.push(arr2[index]);
+        }
+        if (arr2.find((itemArr2) => itemArr2 === letter)) {
+          const index = arr2.findIndex((itemArr2) => itemArr2 === letter);
+          resultWord.push(arr1[index]);
+        }
+      }
+      if (arr1.find((itemArr1) => itemArr1.toUpperCase() === letter)) {
+        const index = arr1.findIndex(
+          (itemArr1) => itemArr1.toUpperCase() === letter
+        );
+        resultWord.push(arr2[index].toUpperCase());
+      }
+      if (arr2.find((itemArr2) => itemArr2.toUpperCase() === letter)) {
+        const index = arr2.findIndex(
+          (itemArr2) => itemArr2.toUpperCase() === letter
+        );
+        resultWord.push(arr1[index].toUpperCase());
+      }
+      if (letter.includes('?') || letter.includes('!')) {
+        resultWord.push(letter);
+      }
+    });
+    resultWord.join('');
+    return resultWord;
+  }
+  let usedArray;
+  const resultArray = [];
+  let returnedArray = [];
+  if (str.match(/\s/)) {
+    usedArray = str.split(' ');
+    usedArray.forEach((item) => {
+      resultArray.push(rot13ForSingleWord(item.split('')).join(''));
+      returnedArray = resultArray.join(' ');
+    });
+  } else {
+    usedArray = str.split('');
+    returnedArray = rot13ForSingleWord(usedArray).join('');
+  }
+  return returnedArray;
 }
 /**
  * Returns playid card id.
